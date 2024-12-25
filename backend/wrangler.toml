@@ -1,0 +1,33 @@
+name = "admin-dashboard-backend"
+main = "src/index.ts"
+compatibility_date = "2024-12-25"
+
+# compatibility_flags = [ "nodejs_compat" ]
+
+[env.production.vars]
+BASE_URL = "https://bigfootpublicationstraditional.in"
+DATABASE_URL="prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiNWUzZTg2NDUtYTFiNy00ZGE3LThhNjMtMGRiNmZlMDA0MzYzIiwidGVuYW50X2lkIjoiZDE3NjdlMjQ3ODc0NTE4ZDhhNzIwYTk2NDhjOTZlNDcxMDNkZWI5MmMzMTI4M2RkYTY0MGRiMTlkOGZkMGZmOSIsImludGVybmFsX3NlY3JldCI6ImI1NTVkNTc1LTI3NjYtNDg2Mi1hOTgwLTMwNzMzNTAxMTRjZCJ9.jfZsFFrj4ba8GDfa2OZn10JvInSu0LKiq79hbWiDfDk"
+[vars]
+BASE_URL = "https://bigfootpublicationstraditional.in"
+DATABASE_URL="prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiNWUzZTg2NDUtYTFiNy00ZGE3LThhNjMtMGRiNmZlMDA0MzYzIiwidGVuYW50X2lkIjoiZDE3NjdlMjQ3ODc0NTE4ZDhhNzIwYTk2NDhjOTZlNDcxMDNkZWI5MmMzMTI4M2RkYTY0MGRiMTlkOGZkMGZmOSIsImludGVybmFsX3NlY3JldCI6ImI1NTVkNTc1LTI3NjYtNDg2Mi1hOTgwLTMwNzMzNTAxMTRjZCJ9.jfZsFFrj4ba8GDfa2OZn10JvInSu0LKiq79hbWiDfDk"
+
+
+# [[kv_namespaces]]
+# binding = "MY_KV_NAMESPACE"
+# id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# [[r2_buckets]]
+# binding = "MY_BUCKET"
+# bucket_name = "my-bucket"
+
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "my-database"
+# database_id = ""
+
+# [ai]
+# binding = "AI"
+
+# [observability]
+# enabled = true
+# head_sampling_rate = 1
