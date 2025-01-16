@@ -14,12 +14,49 @@ model Admin{
   username      String @unique
   password      String
 }
-
+model Books{
+  id            String @id @default(uuid())
+  title         String
+  authorId      String
+  author        Author @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  description   String
+  genre         String
+  image         String
+}
+enum Gender{
+  MALE
+  FEMALE
+}
 model Author{
   id            String @id @default(uuid())
   name          String
-  email         String
-  username      String
+  email         String @unique
+  username      String @unique
   password      String
-  books         String[]
+  bio           String?
+  published     Int?
+  profilePic    String?
+  gender        Gender?
+  createdAt     DateTime @default(now())
+  books         Books[]
+  bank          Bank[]
+  excels        Excel[]
+}
+model Bank{
+  id            String @id @default(uuid())
+  name          String
+  accountNumber String
+  ifsc          String
+  userId        String
+  branch        String
+  user          Author @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Excel{
+  id            String @id @default(uuid())
+  name          String
+  date          DateTime
+  file          String
+  authorId      String
+  author        Author @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }

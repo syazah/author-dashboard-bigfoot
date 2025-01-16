@@ -1,5 +1,8 @@
 import { Hono } from "hono";
-import { AdminSignupController } from "../controller/admin";
+import {
+  AdminLoginController,
+  AdminSignupController,
+} from "../controller/admin";
 const app = new Hono<{
   Bindings: {
     DATABASE_URL: string;
@@ -7,6 +10,7 @@ const app = new Hono<{
 }>();
 
 //AUTH ROUTES
-app.post("signup", AdminSignupController);
+app.post("/signup", AdminSignupController);
+app.post("/login", AdminLoginController);
 
 export default app;
