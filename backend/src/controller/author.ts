@@ -95,6 +95,11 @@ export const AuthorDetailsController = async (c: Context) => {
       where: {
         id: id,
       },
+      include: {
+        books: true,
+        bank: true,
+        excels: true,
+      },
     });
     if (!author) {
       c.status(400);
@@ -203,6 +208,63 @@ export const AuthorUpdateDetailController = async (c: Context) => {
       },
     });
     return c.json({ success: true, message: "Author Updated" });
+  } catch (error) {
+    throw error;
+  }
+};
+//AUTHOR EXCEL UPLOAD CONTROLLER
+export const AuthorExcelUploadController = async (c: Context) => {
+  const {
+    username,
+    url,
+    date,
+  }: { username: string; url: string; date: string } = await c.req.json();
+  try {
+    // PRISMA CONFIGURATIONS
+    const prisma = new PrismaClient({
+      datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
+    //UPLOAD EXCEL SHEET
+    const user = await prisma.author.findUnique({
+      where: {
+        username,
+      },
+    });
+    if (!user) {
+      throw new Error("User not found");
+    }
+    await prisma.excel.create({
+      data: {
+        authorId: user.id,
+        file: url,
+        date,
+        name: `${username}-${date}`,
+      },
+    });
+    return c.json({ success: true, message: "Excel Sheet Uploaded" });
+  } catch (error) {
+    throw error;
+  }
+};
+//UPLOAD AGREEMENT
+export const AuthorUploadAgreementController = async (c: Context) => {
+  const { username, url }: { username: string; url: string } =
+    await c.req.json();
+  try {
+    // PRISMA CONFIGURATIONS
+    const prisma = new PrismaClient({
+      datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
+    //UPLOAD AGREEMENT
+    await prisma.author.update({
+      where: {
+        username,
+      },
+      data: {
+        agreement: url,
+      },
+    });
+    return c.json({ success: true, message: "Agreement Uploaded" });
   } catch (error) {
     throw error;
   }

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Excel" ALTER COLUMN "date" SET DATA TYPE TEXT;

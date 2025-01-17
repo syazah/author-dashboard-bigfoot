@@ -35,6 +35,7 @@ model Author{
   password      String
   bio           String?
   published     Int?
+  agreement     String?
   profilePic    String?
   gender        Gender?
   createdAt     DateTime @default(now())
@@ -55,7 +56,7 @@ model Bank{
 model Excel{
   id            String @id @default(uuid())
   name          String
-  date          DateTime
+  date          String
   file          String
   authorId      String
   author        Author @relation(fields: [authorId], references: [id], onDelete: Cascade)

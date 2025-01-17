@@ -10,13 +10,8 @@ import Settings from "../components/Author/Settings";
 import { HiMiniDocumentText } from "react-icons/hi2";
 import { IoAdd } from "react-icons/io5";
 import { motion } from "framer-motion";
-type AuthorType = {
-  username: string;
-  email: string;
-  id: string;
-  name: string;
-  books: string[];
-};
+import { AuthorType } from "./AdminAuthor";
+import Agreement from "../components/Author/Agreement";
 function Author() {
   const { id } = useParams();
   const [author, setAuthor] = useState<null | AuthorType>(null);
@@ -59,6 +54,7 @@ function Author() {
       {sessionStorage.getItem("completed") === "true" ? (
         <div className="w-[94%] h-full">
           {selected === 0 && <Dashboard author={author} />}
+          {selected === 3 && <Agreement agreement={author.agreement} />}
           {selected === 4 && <Settings />}
         </div>
       ) : (

@@ -6,6 +6,8 @@ import {
   AllAuthorsController,
   SearchAuthorController,
   AuthorUpdateDetailController,
+  AuthorExcelUploadController,
+  AuthorUploadAgreementController,
 } from "../controller/author";
 
 const app = new Hono<{
@@ -21,7 +23,9 @@ app.post("/login", AuthorLoginController);
 app.get("/all", AllAuthorsController);
 app.get("/search", SearchAuthorController);
 app.get("/:id", AuthorDetailsController);
-
+//UPLOAD
+app.post("/upload-excel", AuthorExcelUploadController);
+app.post("/upload-agreement", AuthorUploadAgreementController);
 //UPDATE AUTHOR DETAILS
 app.patch("/:authorId/update", AuthorUpdateDetailController);
 
