@@ -4,7 +4,8 @@ function Agreement({ agreement }: { agreement: string }) {
   const [loading, setLoading] = useState(false);
   return (
     <div className="w-full h-full p-2 flex flex-col gap-2">
-      <div className="w-full flex justify-start items-center border-b-[2px] border-yellow-600 text-xl font-semibold">
+      <div className="w-full flex justify-start items-center border-b-[2px] border-yellow-600 text-xl font-semibold p-1">
+        <img className="w-8 h-8" src={"/LOGO.png"}/>
         Author Agreement
       </div>
       {loading ? (

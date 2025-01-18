@@ -214,11 +214,24 @@ export const AuthorUpdateDetailController = async (c: Context) => {
 };
 //AUTHOR EXCEL UPLOAD CONTROLLER
 export const AuthorExcelUploadController = async (c: Context) => {
+  type compensation = {
+    [key: string | number]: string | number;
+  };
   const {
     username,
     url,
     date,
-  }: { username: string; url: string; date: string } = await c.req.json();
+    channels,
+    totalQuantity,
+    compensationByDate,
+  }: {
+    username: string;
+    url: string;
+    date: string;
+    channels: compensation;
+    totalQuantity: compensation;
+    compensationByDate: compensation;
+  } = await c.req.json();
   try {
     // PRISMA CONFIGURATIONS
     const prisma = new PrismaClient({
@@ -239,6 +252,9 @@ export const AuthorExcelUploadController = async (c: Context) => {
         file: url,
         date,
         name: `${username}-${date}`,
+        channel: JSON.stringify(channels),
+        quantity: JSON.stringify(totalQuantity),
+        compensation: JSON.stringify(compensationByDate),
       },
     });
     return c.json({ success: true, message: "Excel Sheet Uploaded" });

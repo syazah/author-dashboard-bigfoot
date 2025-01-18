@@ -59,5 +59,8 @@ model Excel{
   date          String
   file          String
   authorId      String
+  channel       String
+  quantity      String
+  compensation  String
   author        Author @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }

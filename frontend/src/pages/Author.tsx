@@ -12,6 +12,8 @@ import { IoAdd } from "react-icons/io5";
 import { motion } from "framer-motion";
 import { AuthorType } from "./AdminAuthor";
 import Agreement from "../components/Author/Agreement";
+import Excel from "../components/Author/Excel";
+import Book from "../components/Author/Book";
 function Author() {
   const { id } = useParams();
   const [author, setAuthor] = useState<null | AuthorType>(null);
@@ -54,6 +56,8 @@ function Author() {
       {sessionStorage.getItem("completed") === "true" ? (
         <div className="w-[94%] h-full">
           {selected === 0 && <Dashboard author={author} />}
+          {selected === 1 && <Book author={author} />}
+          {selected === 2 && <Excel author={author} />}
           {selected === 3 && <Agreement agreement={author.agreement} />}
           {selected === 4 && <Settings />}
         </div>

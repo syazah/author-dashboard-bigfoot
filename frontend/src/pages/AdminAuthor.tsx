@@ -18,6 +18,9 @@ export type Excel = {
   file: string;
   date: string;
   name: string;
+  channels: string;
+  quantity: string;
+  compensation: string;
 };
 export type Book = {
   id: string;
@@ -35,7 +38,7 @@ export type Bank = {
   branch: string;
   userId: string;
 };
-export  type AuthorType = {
+export type AuthorType = {
   id: string;
   name: string;
   email: string;

@@ -12,6 +12,12 @@ type Excel = {
   file: string;
   date: string;
   name: string;
+  channels: string;
+  quantity: string;
+  compensation: string;
+};
+type compensation = {
+  [key: string | number]: string | number;
 };
 export default function ExcelUpload({
   username,
@@ -25,6 +31,20 @@ export default function ExcelUpload({
   const [excelFile, setExcelFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [excelUploaded, setExcelUploaded] = useState<null | Excel>(null);
+  function convertDateToExcelEpoch(dateString: string) {
+    if (Number(dateString) === parseInt(dateString)) {
+      return parseInt(dateString);
+    }
+    const dateParts = dateString.split("/");
+    const day = parseInt(dateParts[0], 10);
+    const month = parseInt(dateParts[1], 10) - 1; // Excel uses zero-based month index
+    const year = parseInt(dateParts[2], 10);
+
+    const date = new Date(year, month, day);
+    return Math.floor(
+      (Number(date) - Number(new Date(1900, 0, 1))) / (1000 * 60 * 60 * 24)
+    );
+  }
   const sanitizeFileName = (fileName: string) => {
     return fileName
       .replace(/\s+/g, "-") // Replace spaces with dashes
@@ -54,7 +74,11 @@ export default function ExcelUpload({
     };
     reader.readAsArrayBuffer(file);
   }
-  async function UploadSheet() {
+  async function UploadSheet(
+    channels: compensation,
+    totalQuantity: compensation,
+    compensationByDate: compensation
+  ) {
     try {
       setUploading(true);
       if (excelFile) {
@@ -82,6 +106,9 @@ export default function ExcelUpload({
               username,
               url: publicUrl,
               date: selectedDate,
+              channels,
+              totalQuantity,
+              compensationByDate,
             }),
           });
           const data = await res.json();
@@ -97,6 +124,38 @@ export default function ExcelUpload({
     } catch (error) {
       setUploading(false);
       alert(JSON.stringify(error));
+    }
+  }
+
+  async function calculateStats() {
+    if (excelData) {
+      let totalQuantity: compensation = {};
+      let compensationByDate: compensation = {};
+      let channels: compensation = {};
+      Object.values(excelData).forEach((ParentValue, index) => {
+        if (index != 0) {
+          const ChildValues = Object.values(ParentValue);
+          const excelDate = Number(
+            convertDateToExcelEpoch(String(ChildValues[3]))
+          );
+          totalQuantity = {
+            ...totalQuantity,
+            [excelDate]: Number(totalQuantity[excelDate] || 0) + 1,
+          };
+          compensationByDate = {
+            ...compensationByDate,
+            [excelDate]: Number(ChildValues[17]),
+          };
+          channels = {
+            ...channels,
+            [String(ChildValues[1])]:
+              Number(channels[String(ChildValues[1])] || 0) + 1,
+          };
+        }
+      });
+      UploadSheet(channels, totalQuantity, compensationByDate);
+    } else {
+      alert("Upload Excel Sheet First, Or referesh the page");
     }
   }
   useEffect(() => {
@@ -147,7 +206,7 @@ export default function ExcelUpload({
         </div>
         {excelData && excelUploaded === null && (
           <div
-            onClick={UploadSheet}
+            onClick={calculateStats}
             className="p-2 bg-green-600 rounded-full flex justify-center items-center cursor-pointer"
           >
             {uploading ? (
@@ -186,14 +245,19 @@ export default function ExcelUpload({
                         : "hover:bg-gray-200"
                     } `}
                   >
-                    {Object.values(row).map((cell, i) => (
-                      <td
-                        key={`${index}-${i}`}
-                        className="border px-4 py-2 text-xs"
-                      >
-                        {cell as ReactNode}
-                      </td>
-                    ))}
+                    {Object.values(row).map((cell, i) => {
+                      if (i === 3 && index !== 0) {
+                        cell = convertDateToExcelEpoch(String(cell));
+                      }
+                      return (
+                        <td
+                          key={`${index}-${i}`}
+                          className="border px-4 py-2 text-xs"
+                        >
+                          {cell as ReactNode}
+                        </td>
+                      );
+                    })}
                   </tr>
                 ))}
               </tbody>
